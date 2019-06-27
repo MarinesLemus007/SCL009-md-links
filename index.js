@@ -11,8 +11,11 @@ const fs = require('fs');
 const FileHound = require('filehound');
 
 let terminalValue = [];
+let linksStatus =[];
+let hrefLink = [];
+let filename = [];
 
-console.log(process.argv);
+//console.log(process.argv);
 
 process.argv.forEach((val, index) => {
   terminalValue.push(process.argv[index]);
@@ -59,7 +62,7 @@ console.log(terminalValue);
           file:path
         
         })
-  
+ 
       }
       marked(data, {renderer:renderer})
         console.log(links);
@@ -70,33 +73,70 @@ console.log(terminalValue);
   //links(terminalValue[2]);
 
   const fetchlinks = (links) => {
-    let hrefLink = [];
+    
     hrefLink = links.map(link=>{
     return link.href;
     });
 
     console.log(hrefLink);
+    console.log("Total =" +" "+ hrefLink.length);
+
 
   hrefLink.forEach(element => {
+    let hrefLink = {};
   fetch(element)
     .then(res => {
      
-        console.log(res.url);
-        console.log(res.ok);
-        console.log(res.status);
-        console.log(res.statusText);
-  
+      hrefLink.url = res.url;
+      hrefLink.ok = res.ok;
+      hrefLink.status = res.status;
+      hrefLink.statusText = res.statusText;
+      linksStatus.push(hrefLink);
+      console.log(linksStatus);
+
+      //console.log( hrefLink.url+" "+  hrefLink.ok+" "+  hrefLink.status+" "+  hrefLink.statusText);
+     // console.log(res.url+" "+ res.ok+" "+ res.status+" "+ res.statusText);
+       
     });
         })
-        
+
+    // .catch(error =>{
+    //   console.log(error);
+    // })
       }
 
   const SearDirectoryFile = (directory) =>{
 
   const files = FileHound.create()
+    .discard("node_modules")
     .paths(directory)
     .ext('md')
     .find();
-  files.then(console.log);
-  
+  //files.then(console.log);
+  files.then (res =>{
+    res.forEach((element, index)=> {
+      //imprimir los archivos con basename
+      console.log(`${index}: ${path.basename(element)}`);
+   links(element);
+    // res.forEach (element =>{
+    //   filename =  path.basename(element);
+    //   console.log(filename);
+    })
+  })
+
+  // .catch(error =>{
+  //   console.log(error);
+  // })
+//filename.then(name => {
+//name.forEach(element => {
+//let analized = links(element);
+//console.log(analized);
+// })
+// })
+
+// links.forEach((element) => {
+//   if (!LinksUnique.includes(element)) {
+//       LinksUnique.push(element);
+//   }
+
 }
