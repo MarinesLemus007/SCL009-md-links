@@ -3,6 +3,7 @@
 //   // ...
 // };
 
+//Funcionalidades instaladas
 const fetch = require('node-fetch');
 const path = require('path');
 const process = require("process");
@@ -10,52 +11,54 @@ const marked = require("marked");
 const fs = require('fs');
 const FileHound = require('filehound');
 
-let terminalValue = [];
-let linksStatus =[];
-let hrefLink = [];
-let filename = [];
+//Declaración de variables globales
+let arrayLinksFromFile =[];
+let rescueValuesFromTerminal = [];
+let totalLinksFromOptionStats = [];
+let uniqueLinksFromOptionStats = [];
 
-//console.log(process.argv);
-
+//process.arg() me permite rescatar lo ingresado por el usuario desde la terminal
 process.argv.forEach((val, index) => {
-  terminalValue.push(process.argv[index]);
-  //console.log(`${index}: ${val}`);
+
+  rescueValuesFromTerminal.push(process.argv[index]);
+
 });
-console.log(terminalValue);
-  //terminalValue[2] = path
+//console.log(rescueValuesFromTerminal);
 
-  fs.stat(terminalValue[2], (err, stats) => {
+//fs.stats() diferencia si lo introducido por el usuario es un archivo o un directorio
+fs.stat(rescueValuesFromTerminal[2], (err, stats) => {
     
-    if (err) {
-      console.error(err)
-    }
+  if (err) {
+    console.error(err)
+  }
   
-    if(stats.isFile()){
+  if(stats.isFile()){
+    console.log("Soy un archivo");
+    getarrayLinksFromFileFromFile(rescueValuesFromTerminal[2]);
+  }
 
-      console.log("Soy un archivo");
-      links(terminalValue[2]);
-
-    }
-
-    if(stats.isDirectory()){
-      console.log("Soy un directorio");
-      SearDirectoryFile(terminalValue[2]);
-    }
+  if(stats.isDirectory()){
+    console.log("Soy un directorio");
+    getMdFilesFromDirectories(rescueValuesFromTerminal[2]);
+  }
     
   })
 
-  const links = (path) =>{
+//fs.readFile busca y toma los links encontrados en los archivos
+  const getarrayLinksFromFileFromFile = (path) =>{
     fs.readFile(path,"utf8", (err,data) =>{
+      
       if(err){
         throw err;
       }
-        let links =[];
+      
+      arrayLinksFromFile =[];
   
       const renderer = new marked.Renderer();
   
       renderer.link = function(href, title, text){
   
-        links.push({
+        arrayLinksFromFile.push({
           
           href:href,
           text:text,
@@ -64,79 +67,70 @@ console.log(terminalValue);
         })
  
       }
+      
       marked(data, {renderer:renderer})
-        console.log(links);
-        fetchlinks(links);
+      //console.log(arrayLinksFromFile);
+      
+      evaluationStatusOfLinksWithFetch(arrayLinksFromFile);
+      parametersGivenByOptionStats(arrayLinksFromFile);
+
     })
   
   }
-  //links(terminalValue[2]);
 
-  const fetchlinks = (links) => {
+//Función asociada a la opcion Stats que ofrece el total de links encontrados y únicos
+const parametersGivenByOptionStats = (array) => {
+  totalLinksFromOptionStats = array.map(el => {
+    return el.href;
+  });
+  
+  uniqueLinksFromOptionStats = totalLinksFromOptionStats.filter((item,index,arr) => {
+      return arr.indexOf(item) === index;
+  });
+  
+  console.log(`Total: ${totalLinksFromOptionStats.length} \nUnique: ${uniqueLinksFromOptionStats.length}`);
+
+}
+ 
+//fetch evalua los estatus de los links encontrados
+const evaluationStatusOfLinksWithFetch = (array) => {
     
-    hrefLink = links.map(link=>{
-    return link.href;
-    });
+  array.map(element =>{
+    
+    return fetch(element.href)
+    .then( res =>{
+        
+      element.status = res.status
+      element.statusText = res.statusText
+      
+      //console.log(element);
+      console.log(element.href+" "+element.statusText+" "+element.status+" "+element.text );  
+      return element;
+          
+    });    
+  })
+}
 
-    console.log(hrefLink);
-    console.log("Total =" +" "+ hrefLink.length);
-
-
-  hrefLink.forEach(element => {
-    let hrefLink = {};
-  fetch(element)
-    .then(res => {
-     
-      hrefLink.url = res.url;
-      hrefLink.ok = res.ok;
-      hrefLink.status = res.status;
-      hrefLink.statusText = res.statusText;
-      linksStatus.push(hrefLink);
-      console.log(linksStatus);
-
-      //console.log( hrefLink.url+" "+  hrefLink.ok+" "+  hrefLink.status+" "+  hrefLink.statusText);
-     // console.log(res.url+" "+ res.ok+" "+ res.status+" "+ res.statusText);
-       
-    });
-        })
-
-    // .catch(error =>{
-    //   console.log(error);
-    // })
-      }
-
-  const SearDirectoryFile = (directory) =>{
+//FileHound busca archivos con formato md dentro de los directorios
+const getMdFilesFromDirectories = (directory) =>{
 
   const files = FileHound.create()
-    .discard("node_modules")
-    .paths(directory)
-    .ext('md')
-    .find();
-  //files.then(console.log);
-  files.then (res =>{
-    res.forEach((element, index)=> {
-      //imprimir los archivos con basename
-      console.log(`${index}: ${path.basename(element)}`);
-   links(element);
-    // res.forEach (element =>{
-    //   filename =  path.basename(element);
-    //   console.log(filename);
+  .discard("node_modules")
+  .paths(directory)
+  .ext('md')
+  .find();
+  
+    files.then (res =>{
+      res.forEach((element, index)=> {
+        
+        console.log(`${index}: ${path.basename(element)}`);
+        
+        getarrayLinksFromFileFromFile(element);
+      })
     })
+
+  .catch(error =>{
+  console.log(error);
   })
-
-  // .catch(error =>{
-  //   console.log(error);
-  // })
-//filename.then(name => {
-//name.forEach(element => {
-//let analized = links(element);
-//console.log(analized);
-// })
-// })
-
-// links.forEach((element) => {
-//   if (!LinksUnique.includes(element)) {
-//       LinksUnique.push(element);
-//   }
 
 }
