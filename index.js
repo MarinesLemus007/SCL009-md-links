@@ -4,10 +4,11 @@
 // };
 
 //Funcionalidades instaladas
+const chalk = require('chalk');
 const fetch = require('node-fetch');
 const path = require('path');
-const process = require("process");
-const marked = require("marked");
+const process = require('process');
+const marked = require('marked');
 const fs = require('fs');
 const FileHound = require('filehound');
 
@@ -16,6 +17,7 @@ let arrayLinksFromFile =[];
 let rescueValuesFromTerminal = [];
 let totalLinksFromOptionStats = [];
 let uniqueLinksFromOptionStats = [];
+let brokenLinksCounter = 0;
 
 //process.arg() me permite rescatar lo ingresado por el usuario desde la terminal
 process.argv.forEach((val, index) => {
@@ -33,20 +35,20 @@ fs.stat(rescueValuesFromTerminal[2], (err, stats) => {
   }
   
   if(stats.isFile()){
-    console.log("Soy un archivo");
-    getarrayLinksFromFileFromFile(rescueValuesFromTerminal[2]);
+    console.log(chalk.magenta('Soy un archivo'));
+    getArrayLinksFromFileFromFile(rescueValuesFromTerminal[2]);
   }
 
   if(stats.isDirectory()){
-    console.log("Soy un directorio");
+    console.log(chalk.magenta('Soy un directorio'));
     getMdFilesFromDirectories(rescueValuesFromTerminal[2]);
   }
     
   })
 
 //fs.readFile busca y toma los links encontrados en los archivos
-  const getarrayLinksFromFileFromFile = (path) =>{
-    fs.readFile(path,"utf8", (err,data) =>{
+  const getArrayLinksFromFileFromFile = (path) =>{
+    fs.readFile(path,'utf8', (err,data) =>{
       
       if(err){
         throw err;
@@ -88,34 +90,45 @@ const parametersGivenByOptionStats = (array) => {
       return arr.indexOf(item) === index;
   });
   
-  console.log(`Total: ${totalLinksFromOptionStats.length} \nUnique: ${uniqueLinksFromOptionStats.length}`);
-
+  console.log(`Total: ${chalk.blue(totalLinksFromOptionStats.length)} \nUnique: ${chalk.blue(uniqueLinksFromOptionStats.length)}`);
+  
 }
  
 //fetch evalua los estatus de los links encontrados
 const evaluationStatusOfLinksWithFetch = (array) => {
-    
+  
   array.map(element =>{
     
     return fetch(element.href)
     .then( res =>{
-        
-      element.status = res.status
-      element.statusText = res.statusText
+     
+      element.status = res.status;
+      element.statusText = res.statusText;
       
-      //console.log(element);
-      console.log(element.href+" "+element.statusText+" "+element.status+" "+element.text );  
+      console.log(`${chalk.green(element.href)} ${chalk.yellow(element.statusText)} ${chalk.blue(element.status)} ${element.text}`);  
+      
+      brokensLinksForOptionStatsAndValidate(element.status);
       return element;
-          
-    });    
+    });  
+    
   })
+   
 }
 
+const brokensLinksForOptionStatsAndValidate = (status) =>{
+
+  if (status >= 400){    
+    brokenLinksCounter = brokenLinksCounter + 1;
+  }
+  console.log(`Broken: ${chalk.blue(brokenLinksCounter)}`);
+  return brokenLinksCounter;   
+} 
+ 
 //FileHound busca archivos con formato md dentro de los directorios
 const getMdFilesFromDirectories = (directory) =>{
 
   const files = FileHound.create()
-  .discard("node_modules")
+  .discard('node_modules')
   .paths(directory)
   .ext('md')
   .find();
@@ -123,9 +136,9 @@ const getMdFilesFromDirectories = (directory) =>{
     files.then (res =>{
       res.forEach((element, index)=> {
         
-        console.log(`${index}: ${path.basename(element)}`);
+        console.log(`${chalk.blue(index)}: ${path.basename(element)}`);
         
-        getarrayLinksFromFileFromFile(element);
+        getArrayLinksFromFileFromFile(element);
       })
     })
 
