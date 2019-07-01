@@ -37,9 +37,11 @@ else if(rescueValuesFromTerminal[3] === "--stats"){
   });
 }
 
-else if(rescueValuesFromTerminal[3] === ""){
-  
+else if(rescueValuesFromTerminal.length>2){
   mdLinks(rescueValuesFromTerminal[2], optionsFromTerminal); 
+  optionsFromTerminal.push({
+    default:true
+  });
 }
 
-console.log(rescueValuesFromTerminal);
+//console.log(rescueValuesFromTerminal);

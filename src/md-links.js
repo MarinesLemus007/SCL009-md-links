@@ -29,7 +29,7 @@ const mdLinks = (pathTerminal, options) => {
     }
 
     else if(stats.isDirectory()){
-        console.log(chalk.magenta('Soy un directorio'));
+        //console.log(chalk.magenta('Soy un directorio'));
         getMdFilesFromDirectories(pathTerminal);
     }
         
@@ -56,14 +56,20 @@ const mdLinks = (pathTerminal, options) => {
             file:path
             
             })
-    
+            
+        if(options[0].default){
+                console.log(`${chalk.magenta(path)} ${chalk.green(href)} ${chalk.yellow(text)}`);
+            }
         }
         
         marked(data, {renderer:renderer})
-        //console.log(arrayLinksFromFile);
-        console.log(options);
+        
+       
+
+        //console.log(options);
         if(options[0].both){
             parametersGivenByOptionStats(arrayLinksFromFile);
+            evaluationStatusOfLinksWithFetch(arrayLinksFromFile);     
         }
       
         else if (options[0].validate) {
@@ -108,11 +114,15 @@ const mdLinks = (pathTerminal, options) => {
             status : res.status
         
         })   
-            
+
+        if(options[0].validate){   
         console.log(`${chalk.magenta(path.basename(element.file))} ${chalk.green(element.href)} ${chalk.yellow(res.statusText)} ${chalk.blue(res.status)} ${element.text}`);  
-        
-        if(array.length === arrayStatusLinksWithFectch.length && options[0].both){
-            brokensLinksForOptionStatsAndValidate(arrayStatusLinksWithFectch);
+        }
+
+        if(array.length === arrayStatusLinksWithFectch.length){
+            if(options[0].both){
+                brokensLinksForOptionStatsAndValidate(arrayStatusLinksWithFectch);
+            }
         }
         return element;
         })
