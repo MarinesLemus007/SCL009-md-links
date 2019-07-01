@@ -1,0 +1,11 @@
+[ 'C:\\Program Files\\nodejs\\node.exe',
+  'C:\\Users\\Maximiliano\\AppData\\Roaming\\npm\\node_modules\\md-links\\index.js',
+  'C:\\Users\\Maximiliano\\Desktop\\SCL009-md-links',
+  '--stats' ]
+Soy un directorio
+0: prueba.md
+1: README.md
+Total: 4 
+Unique: 3
+Total: 9 
+Unique: 9
