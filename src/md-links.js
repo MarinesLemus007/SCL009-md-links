@@ -25,7 +25,11 @@ const mdLinks = (pathTerminal, options) => {
     
     else if(stats.isFile()){
         //console.log(chalk.magenta('Soy un archivo'));
-        getArrayLinksFromFileFromFile(pathTerminal);
+        getArrayLinksFromFile(pathTerminal)
+        .then(res=>{
+            
+        })
+        .catch(err=> console.log(err));
     }
 
     else if(stats.isDirectory()){
@@ -36,52 +40,53 @@ const mdLinks = (pathTerminal, options) => {
     })
 
     //fs.readFile busca y toma los links encontrados en los archivos
-    const getArrayLinksFromFileFromFile = (path) =>{
-        fs.readFile(path,'utf8', (err,data) =>{
-        
-        if(err){
-            throw err;
-        }
-        
-        arrayLinksFromFile =[];
-    
-        const renderer = new marked.Renderer();
-    
-        renderer.link = function(href, title, text){
-    
-            arrayLinksFromFile.push({
+    const getArrayLinksFromFile = (path) =>{
+        return new Promise((resolved, rejected) =>{
+            fs.readFile(path,'utf8', (err,data) =>{
             
-            href:href,
-            text:text,
-            file:path
-            
-            })
-            
-        if(options[0].default){
-                console.log(`${chalk.magenta(path)} ${chalk.green(href)} ${chalk.yellow(text)}`);
+            if(err){
+                rejected(err);
             }
-        }
+            
+            arrayLinksFromFile =[];
         
-        marked(data, {renderer:renderer})
+            const renderer = new marked.Renderer();
         
-       
+            renderer.link = function(href, title, text){
+        
+                arrayLinksFromFile.push({
+                
+                href:href,
+                text:text,
+                file:path
+                
+                })
+                
+            if(options[0].default){
+                    console.log(`${chalk.magenta(path)} ${chalk.green(href)} ${chalk.yellow(text)}`);
+                }
+            }
+        
+            marked(data, {renderer:renderer})
+            
+            
 
-        //console.log(options);
-        if(options[0].both){
-            parametersGivenByOptionStats(arrayLinksFromFile);
-            evaluationStatusOfLinksWithFetch(arrayLinksFromFile);     
-        }
-      
-        else if (options[0].validate) {
-            evaluationStatusOfLinksWithFetch(arrayLinksFromFile); 
-         }
+            //console.log(options);
+            if(options[0].both){
+                parametersGivenByOptionStats(arrayLinksFromFile);
+                evaluationStatusOfLinksWithFetch(arrayLinksFromFile);     
+            }
         
-        else if (options[0].stats) {
-            parametersGivenByOptionStats(arrayLinksFromFile);
-         }
-
+            else if (options[0].validate) {
+                evaluationStatusOfLinksWithFetch(arrayLinksFromFile); 
+            }
+            
+            else if (options[0].stats) {
+                parametersGivenByOptionStats(arrayLinksFromFile);
+            }
+                resolved(arrayLinksFromFile);
+            })
         })
-    
     }
 
     //Función asociada a la opcion Stats que ofrece el total de links encontrados y únicos
@@ -121,7 +126,10 @@ const mdLinks = (pathTerminal, options) => {
 
         if(array.length === arrayStatusLinksWithFectch.length){
             if(options[0].both){
-                brokensLinksForOptionStatsAndValidate(arrayStatusLinksWithFectch);
+                setTimeout(() => {
+                    brokensLinksForOptionStatsAndValidate(arrayStatusLinksWithFectch);   
+                }, 5000);
+                
             }
         }
         return element;
@@ -136,7 +144,7 @@ const mdLinks = (pathTerminal, options) => {
     }
 
     const brokensLinksForOptionStatsAndValidate = (arraystatus) =>{
-
+       
     arrayOnlyStatus = arraystatus.map(el=>{
         return el.status;
     });
@@ -166,7 +174,7 @@ const mdLinks = (pathTerminal, options) => {
             
             console.log(`${chalk.blue(index)}: ${path.basename(element)}`);
             
-            getArrayLinksFromFileFromFile(element);
+            getArrayLinksFromFile(element);
         })
         })
 
