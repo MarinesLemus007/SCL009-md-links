@@ -35,6 +35,10 @@ Se debe ingresar en consola el siguiente comando:
 
 ## Guía de uso
 
+### Leer un archivo
+
+<code> md-links file.md </code>
+
 Al ingresar solo la ruta, el usuario recibirá:
 
 * file,
@@ -84,6 +88,59 @@ Con este combo puedes obtener:
 ![imagen-cinco](/img/validatestats.png)
 Imagen 5. Opción stats y validate.
 
+### Leer un directorio
+
+<code> md-links directory.md </code>
+
+Al ingresar solo la ruta, el usuario recibirá:
+
+* file,
+* href y
+* text
+
+Tal como indica la siguiente imagen
+
+![imagen-seis](img/ruta-d.png)
+Imagen 6. Opción por default.
+
+### Options
+
+-- validate
+
+Al usar la opción <code> --validate </code> podrás obtener:
+
+* file,
+* href,
+* status,
+* statusText y 
+* text
+
+![imagen-siete](/img/validate-d.png)
+Imagen 7. Opción validate
+
+-- stats
+
+Con <code> --stats </code> podrás obtener:
+
+* links TOTALES y
+* UNIQUES
+
+![imagen-ocho](img/stats-d.png)
+Imagen 8. Opción stats.
+
+--stats --validate
+
+<code> --stats --validate </code>
+
+Con este combo puedes obtener:
+
+* links TOTALES,
+* UNIQUES y
+* BROKEN
+
+![imagen-nueve](/img/validatestats-d.png)
+Imagen 9. Opción stats y validate.
+
 ## Planificación
 
 Este proyecto se planificó en un tiempo de un poco más de dos semanas.
@@ -94,6 +151,9 @@ Se usó [Trello(dale click)](https://trello.com/b/yapPwKrm/scl009-md-links) para
 ### Dependencias:
 
 * chalk
+* eslint
+* eslint-plugin-jest
 * filehound
+* jest
 * marked
 * node-fetch
