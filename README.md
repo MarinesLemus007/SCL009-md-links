@@ -22,7 +22,7 @@ El objetivo práctico de este proyecto era aorender a cómo crear una librería 
 
 El programa se estructura de la siguiente manera:
 
-![imagen-uno](img/diagrama.png)
+![imagen-uno](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/diagrama.png)
 Imagen 1. Diagrama de flujo del programa.
 
 La ruta ingresada por el usuario comienza a ser evaluada para saber si ésta es un directorio o si es un archivo. Los archivos Markdown encontrados serán evaluados para capturar sus links. Según la opción ingresada por el usuario se obtendrá diferente información que será mostrada en el terminal. En dado caso que el usuario no ingrese opciones, hay una opción por default que entregará información básica de los links evaluados.
@@ -47,7 +47,7 @@ Al ingresar solo la ruta, el usuario recibirá:
 
 Tal como indica la siguiente imagen
 
-![imagen-dos](img/ruta.png)
+![imagen-dos](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/ruta.png)
 Imagen 2. Opción por default.
 
 ### Options
@@ -62,7 +62,7 @@ Al usar la opción <code> --validate </code> podrás obtener:
 * statusText y 
 * text
 
-![imagen-tres](/img/validate.png)
+![imagen-tres](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/validate.png)
 Imagen 3. Opción validate
 
 -- stats
@@ -72,7 +72,7 @@ Con <code> --stats </code> podrás obtener:
 * links TOTALES y
 * UNIQUES
 
-![imagen-cuatro](img/stats.png)
+![imagen-cuatro](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/stats.png)
 Imagen 4. Opción stats.
 
 --stats --validate
@@ -85,7 +85,7 @@ Con este combo puedes obtener:
 * UNIQUES y
 * BROKEN
 
-![imagen-cinco](/img/validatestats.png)
+![imagen-cinco](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/validatestats.png)
 Imagen 5. Opción stats y validate.
 
 ### Leer un directorio
@@ -100,7 +100,7 @@ Al ingresar solo la ruta, el usuario recibirá:
 
 Tal como indica la siguiente imagen
 
-![imagen-seis](img/ruta-d.png)
+![imagen-seis](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/ruta-d.png)
 Imagen 6. Opción por default.
 
 ### Options
@@ -115,7 +115,7 @@ Al usar la opción <code> --validate </code> podrás obtener:
 * statusText y 
 * text
 
-![imagen-siete](/img/validate-d.png)
+![imagen-siete](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/validate-d.png)
 Imagen 7. Opción validate
 
 -- stats
@@ -125,7 +125,7 @@ Con <code> --stats </code> podrás obtener:
 * links TOTALES y
 * UNIQUES
 
-![imagen-ocho](img/stats-d.png)
+![imagen-ocho](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/stats-d.png)
 Imagen 8. Opción stats.
 
 --stats --validate
@@ -138,7 +138,7 @@ Con este combo puedes obtener:
 * UNIQUES y
 * BROKEN
 
-![imagen-nueve](/img/validatestats-d.png)
+![imagen-nueve](https://github.com/MarinesLemus007/SCL009-md-links/raw/new-md/img/validatestats-d.png)
 Imagen 9. Opción stats y validate.
 
 ## Planificación
