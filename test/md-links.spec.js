@@ -111,14 +111,14 @@ test('Al colocar md-links ./carpeta-prueba --validate en la terminal debe darnos
 test('Al colocar md-links ./carpeta-prueba --stats en la terminal debe retorna links Total y Unique', (done) => {
   expect
   mdLinks('./carpeta-prueba', [{ stats:true }]).then(data => {
-    expect(data).toStrictEqual( { Total: 3, Unique: 3 });done();
+    expect(data).toStrictEqual([ { Total: 3, Unique: 3 } ]);done();
   });
 });
 
 test('Al colocar md-links ./carpeta-prueba --stats --validate en la terminal debe retorna links Total, Unique y Broken', (done) => {
   expect
   mdLinks('./carpeta-prueba', [{ both:true }]).then(data => {
-    expect(data).toStrictEqual( { Total: 3, Unique: 3, Broken: 1 });done();
+    expect(data).toStrictEqual([ { Total: 3, Unique: 3, Broken: 1 } ]);done();
   });
 });
 

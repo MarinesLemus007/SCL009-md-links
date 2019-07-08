@@ -47,5 +47,4 @@ else if(rescueValuesFromTerminal.length<=3){
   })
   .catch(err =>{
     console.log(err);
-  })
-  
+  }) 

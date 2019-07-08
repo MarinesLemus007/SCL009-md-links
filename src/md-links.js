@@ -116,7 +116,7 @@ const mdLinks = (pathTerminal, options) => {
           
             return new Promise((resolve, reject) =>{
          
-                arrayLinksFromFile.forEach((element, index) => {
+                arrayLinksFromFile.forEach(element => {
                     
                    fetch(element.href)
                     .then(res => {
@@ -194,10 +194,35 @@ const mdLinks = (pathTerminal, options) => {
                 
                 files
                  .then (res => {
-                    res.forEach((element, index) => { 
-                        resolve(getArrayLinksFromFile(element, options));
+                    let arrayOfMarkdownFound =[];
+                    res.forEach(element => { 
+                        arrayOfMarkdownFound.push(element);    
                     });
+                    Promise.all(arrayOfMarkdownFound.map(el => {
+                        return getArrayLinksFromFile(el, options);
+                    }))
+                    .then(res=>{
+                        let linksFoundInDirectories = Array.prototype.concat.apply([], res);
+                          
+                        if(options[0].default){
+                            resolve(linksFoundInDirectories);
+                        }
+                        
+                        else if(options[0].both){
+                            resolve(linksFoundInDirectories);     
+                        }
+                
+                        else if (options[0].validate) {
+                            resolve(linksFoundInDirectories);
+                        }
+                  
+                        else if (options[0].stats) {
+                            resolve(linksFoundInDirectories);
+                        }
+ 
+                    }) 
                 })    
+               
                 .catch(error =>{
                     reject(error);
                 })
