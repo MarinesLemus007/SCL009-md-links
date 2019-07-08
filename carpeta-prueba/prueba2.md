@@ -1,0 +1,3 @@
+- [Fundamentos de git](https://git-scm.com/book/es/v1/Fundamentos-de-Git-Guardando-cambios-en-el-repositorio)
+- [Métodos para arrays](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/concat)
+- [enlace de figma](https://www.figma.com/file/)

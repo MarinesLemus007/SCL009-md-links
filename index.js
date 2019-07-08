@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-// module.exports = () => {
-//   // ...
-// };
 
 const process = require('process'); 
 const mdLinks= require('./src/md-links.js');
@@ -18,9 +15,9 @@ process.argv.forEach((val, index) => {
 
 if ((rescueValuesFromTerminal[3] === "--validate" && rescueValuesFromTerminal[4] === "--stats" ) || (rescueValuesFromTerminal[3] === "--stats" && rescueValuesFromTerminal[4] === "--validate" )){
   mdLinks(rescueValuesFromTerminal[2], optionsFromTerminal); 
-  optionsFromTerminal.push(
-    {both: true}
-  );
+  optionsFromTerminal.push({
+    both: true
+  });
 }
 
 else if(rescueValuesFromTerminal[3] === "--validate"){
@@ -37,11 +34,18 @@ else if(rescueValuesFromTerminal[3] === "--stats"){
   });
 }
 
-else if(rescueValuesFromTerminal.length>2){
+else if(rescueValuesFromTerminal.length<=3){
   mdLinks(rescueValuesFromTerminal[2], optionsFromTerminal); 
   optionsFromTerminal.push({
     default:true
   });
 }
 
-//console.log(rescueValuesFromTerminal);
+  mdLinks(rescueValuesFromTerminal[2], optionsFromTerminal)
+  .then(res => {   
+    console.log(res);
+  })
+  .catch(err =>{
+    console.log(err);
+  })
+  
